@@ -18,6 +18,21 @@ namespace Infra.Data
         {
             base.OnModelCreating(modelBuilder);
             modelBuilder.ApplyConfigurationsFromAssembly(Assembly.GetExecutingAssembly());
+
+            if (Database.ProviderName == "Microsoft.EntityFrameworkCore.Sqlite")
+            {
+                foreach (var entityType in modelBuilder.Model.GetEntityTypes())
+                {
+                    var properties = entityType.ClrType.GetProperties();
+                    foreach (var property in properties)
+                    {
+                        if (property.PropertyType == typeof(decimal))
+                        {
+                            modelBuilder.Entity(entityType.Name).Property(property.Name).HasConversion<double>();
+                        }
+                    }
+                }
+            }
         }
     }
 }
