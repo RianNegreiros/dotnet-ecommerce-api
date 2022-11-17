@@ -2,11 +2,12 @@ using Core.Entities;
 
 namespace Core.Specification
 {
-  public class ProductWithTypesAndBrandsSpecification : BaseSpecification<Product>
+    public class ProductWithTypesAndBrandsSpecification : BaseSpecification<Product>
     {
         public ProductWithTypesAndBrandsSpecification(ProductSpecParams productParams)
             : base(x =>
-                (!productParams.BrandId.HasValue || x.ProductBrandId == productParams.BrandId) && 
+                (string .IsNullOrEmpty(productParams.Search) || x.Name.ToLower().Contains(productParams.Search)) &&
+                (!productParams.BrandId.HasValue || x.ProductBrandId == productParams.BrandId) &&
                 (!productParams.TypeId.HasValue || x.ProductTypeId == productParams.TypeId)
                 )
         {
