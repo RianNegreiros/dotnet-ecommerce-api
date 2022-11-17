@@ -456,3 +456,5 @@ $RECYCLE.BIN/
 # SQLite files
 *.db
 *.db-*
+
+redis-data
