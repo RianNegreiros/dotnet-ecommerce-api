@@ -1,6 +1,7 @@
 using API.Extensions;
 using API.Helpers;
 using Infra.Data;
+using Infra.Data.Identity;
 using Microsoft.EntityFrameworkCore;
 using StackExchange.Redis;
 
@@ -14,6 +15,10 @@ builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 builder.Services.AddDbContext<StoreContext>(x => x.UseSqlite(builder.Configuration.GetConnectionString("DefaultConnection")));
+builder.Services.AddDbContext<AppIdentityDbContext>(x =>
+{
+    x.UseSqlite(builder.Configuration.GetConnectionString("IdentityConnection"));
+});
 
 builder.Services.AddSingleton<IConnectionMultiplexer>(c =>
 {
