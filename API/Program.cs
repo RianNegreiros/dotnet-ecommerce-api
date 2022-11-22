@@ -16,10 +16,10 @@ builder.Services.AddControllers();
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
-builder.Services.AddDbContext<StoreContext>(x => x.UseSqlite(builder.Configuration.GetConnectionString("DefaultConnection")));
+builder.Services.AddDbContext<StoreContext>(x => x.UseNpgsql(builder.Configuration.GetConnectionString("DefaultConnection")));
 builder.Services.AddDbContext<AppIdentityDbContext>(x =>
 {
-    x.UseSqlite(builder.Configuration.GetConnectionString("IdentityConnection"));
+    x.UseNpgsql(builder.Configuration.GetConnectionString("IdentityConnection"));
 });
 
 builder.Services.AddSingleton<IConnectionMultiplexer>(c =>

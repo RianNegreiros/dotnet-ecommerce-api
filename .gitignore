@@ -458,5 +458,6 @@ $RECYCLE.BIN/
 *.db-*
 
 redis-data
+postgres-data
 
 appsettings.json
