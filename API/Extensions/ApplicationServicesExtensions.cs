@@ -3,12 +3,14 @@ using Core.Interfaces;
 using Infra.Data;
 using Infra.Services;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
+using Npgsql;
 
 namespace API.Extensions
 {
     public static class ApplicationServicesExtensions
     {
-        public static IServiceCollection AddApplicationServices(this IServiceCollection services)
+        public static IServiceCollection AddApplicationServices(this IServiceCollection services, IConfiguration config)
         {
             services.AddScoped<IResponseCacheService, ResponseCacheService>();
             services.AddScoped<IProductRepository, ProductRepository>();
@@ -35,6 +37,39 @@ namespace API.Extensions
                     return new BadRequestObjectResult(errorResponse);
                 };
             });
+            
+            services.AddDbContext<StoreContext>(opt => 
+            {
+                var env = Environment.GetEnvironmentVariable("ASPNETCORE_ENVIRONMENT");
+
+                string connStr;
+
+                if (env == "Development")
+                {
+                    connStr = config.GetConnectionString("DefaultConnection");
+                }
+                else
+                {
+                    var connUrl = Environment.GetEnvironmentVariable("DATABASE_URL");
+
+                    var databaseUri = new Uri(connUrl);
+                    var userInfo = databaseUri.UserInfo.Split(':');
+                    var builder = new NpgsqlConnectionStringBuilder
+                    {
+                        Host = databaseUri.Host,
+                        Port = databaseUri.Port,
+                        Username = userInfo[0],
+                        Password = userInfo[1],
+                        Database = databaseUri.LocalPath.TrimStart('/'),
+                        SslMode = SslMode.Require,
+                        TrustServerCertificate = true
+                    };
+                    connStr = builder.ToString();
+                }
+
+                opt.UseNpgsql(connStr);
+            });
+
             return services;
         }
     }

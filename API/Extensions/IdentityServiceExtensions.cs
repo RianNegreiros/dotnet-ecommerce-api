@@ -4,6 +4,8 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.IdentityModel.Tokens;
 using System.Text;
+using Microsoft.EntityFrameworkCore;
+using Npgsql;
 
 namespace API.Extensions
 {
@@ -29,6 +31,38 @@ namespace API.Extensions
                         ValidateAudience = false
                     };
                 });
+
+            services.AddDbContext<AppIdentityDbContext>(opt => 
+            {
+                var env = Environment.GetEnvironmentVariable("ASPNETCORE_ENVIRONMENT");
+
+                string connStr;
+
+                if (env == "Development")
+                {
+                    connStr = config.GetConnectionString("DefaultConnection");
+                }
+                else
+                {
+                    var connUrl = Environment.GetEnvironmentVariable("DATABASE_URL");
+
+                    var databaseUri = new Uri(connUrl);
+                    var userInfo = databaseUri.UserInfo.Split(':');
+                    var builder = new NpgsqlConnectionStringBuilder
+                    {
+                        Host = databaseUri.Host,
+                        Port = databaseUri.Port,
+                        Username = userInfo[0],
+                        Password = userInfo[1],
+                        Database = databaseUri.LocalPath.TrimStart('/'),
+                        SslMode = SslMode.Require,
+                        TrustServerCertificate = true
+                    };
+                    connStr = builder.ToString();
+                }
+
+                opt.UseNpgsql(connStr);
+            });
 
             return services;
         }
