@@ -44,21 +44,7 @@ namespace API.Extensions
                 }
                 else
                 {
-                    var connUrl = Environment.GetEnvironmentVariable("DATABASE_URL");
-
-                    var databaseUri = new Uri(connUrl);
-                    var userInfo = databaseUri.UserInfo.Split(':');
-                    var builder = new NpgsqlConnectionStringBuilder
-                    {
-                        Host = databaseUri.Host,
-                        Port = databaseUri.Port,
-                        Username = userInfo[0],
-                        Password = userInfo[1],
-                        Database = databaseUri.LocalPath.TrimStart('/'),
-                        SslMode = SslMode.Require,
-                        TrustServerCertificate = true
-                    };
-                    connStr = builder.ToString();
+                    connStr = config["IdentityProductionConnection"];
                 }
 
                 opt.UseNpgsql(connStr);
