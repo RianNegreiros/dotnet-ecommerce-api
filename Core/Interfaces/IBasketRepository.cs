@@ -1,3 +1,4 @@
+using System.Net;
 using Core.Entities;
 
 namespace Core.Interfaces

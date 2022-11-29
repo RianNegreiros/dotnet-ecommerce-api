@@ -40,9 +40,9 @@ namespace Infra.Services
             foreach (var item in basket.Items)
             {
                 var productItem = await _unitOfWork.Repository<Product>().GetByIdAsync(item.Id);
-                if (item.Price != productItem.Price)
+                if (item.Product.Price != productItem.Price)
                 {
-                    item.Price = productItem.Price;
+                    item.Product.Price = productItem.Price;
                 }
             }
 
@@ -54,7 +54,7 @@ namespace Infra.Services
             {
                 var options = new PaymentIntentCreateOptions
                 {
-                    Amount = (long)basket.Items.Sum(i => i.Quantity * (i.Price * 100)) + (long)shippingPrice * 100,
+                    Amount = (long)basket.Items.Sum(i => i.Quantity * (i.Product.Price * 100)) + (long)shippingPrice * 100,
                     Currency = "usd",
                     PaymentMethodTypes = new List<string> { "card" }
                 };
@@ -67,7 +67,7 @@ namespace Infra.Services
             {
                 var options = new PaymentIntentUpdateOptions
                 {
-                    Amount = (long)basket.Items.Sum(i => i.Quantity * (i.Price * 100)) + (long)shippingPrice * 100
+                    Amount = (long)basket.Items.Sum(i => i.Quantity * (i.Product.Price * 100)) + (long)shippingPrice * 100
                 };
 
                 await service.UpdateAsync(basket.PaymentIntentId, options);

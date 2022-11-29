@@ -1,6 +1,8 @@
+using System.Net;
 using System.Text.Json;
 using Core.Entities;
 using Core.Interfaces;
+using Microsoft.EntityFrameworkCore;
 using StackExchange.Redis;
 
 namespace Infra.Data
