@@ -69,15 +69,5 @@ namespace API.Controllers
         {
             return Ok(await _productTypesRepo.ListAllAsync());
         }
-
-        [Cached(600)]
-        [HttpGet("filters")]
-        public async Task<ActionResult<Object>> GetFilters()
-        {
-            var brands = await _productBrandsRepo.ListAllAsync();
-            var types = await _productTypesRepo.ListAllAsync();
-
-            return new { brands, types };
-        }
     }
 }

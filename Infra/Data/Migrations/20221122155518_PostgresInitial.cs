@@ -7,26 +7,11 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace Infra.Data.Migrations
 {
     /// <inheritdoc />
-    public partial class BasketEntityAdded : Migration
+    public partial class PostgresInitial : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
         {
-            migrationBuilder.CreateTable(
-                name: "Baskets",
-                columns: table => new
-                {
-                    Id = table.Column<string>(type: "text", nullable: false),
-                    BuyerId = table.Column<string>(type: "text", nullable: true),
-                    DeliveryMethodId = table.Column<int>(type: "integer", nullable: true),
-                    ClientSecret = table.Column<string>(type: "text", nullable: true),
-                    PaymentIntentId = table.Column<string>(type: "text", nullable: true)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_Baskets", x => x.Id);
-                });
-
             migrationBuilder.CreateTable(
                 name: "DeliveryMethods",
                 columns: table => new
@@ -152,43 +137,6 @@ namespace Infra.Data.Migrations
                         onDelete: ReferentialAction.Cascade);
                 });
 
-            migrationBuilder.CreateTable(
-                name: "BasketItems",
-                columns: table => new
-                {
-                    Id = table.Column<int>(type: "integer", nullable: false)
-                        .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
-                    Quantity = table.Column<int>(type: "integer", nullable: false),
-                    productId = table.Column<int>(type: "integer", nullable: false),
-                    BaskeId = table.Column<int>(type: "integer", nullable: false),
-                    CustomerBasketId = table.Column<string>(type: "text", nullable: true)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_BasketItems", x => x.Id);
-                    table.ForeignKey(
-                        name: "FK_BasketItems_Baskets_CustomerBasketId",
-                        column: x => x.CustomerBasketId,
-                        principalTable: "Baskets",
-                        principalColumn: "Id");
-                    table.ForeignKey(
-                        name: "FK_BasketItems_Products_productId",
-                        column: x => x.productId,
-                        principalTable: "Products",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
-                });
-
-            migrationBuilder.CreateIndex(
-                name: "IX_BasketItems_CustomerBasketId",
-                table: "BasketItems",
-                column: "CustomerBasketId");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_BasketItems_productId",
-                table: "BasketItems",
-                column: "productId");
-
             migrationBuilder.CreateIndex(
                 name: "IX_OrderItems_OrderId",
                 table: "OrderItems",
@@ -214,13 +162,7 @@ namespace Infra.Data.Migrations
         protected override void Down(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.DropTable(
-                name: "BasketItems");
-
-            migrationBuilder.DropTable(
                 name: "OrderItems");
-
-            migrationBuilder.DropTable(
-                name: "Baskets");
 
             migrationBuilder.DropTable(
                 name: "Products");
