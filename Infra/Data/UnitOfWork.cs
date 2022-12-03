@@ -31,7 +31,7 @@ namespace Infra.Data
             return (IGenericRepository<TEntity>) _repositories[type];
         }
 
-        public async Task<int> Save()
+        public async Task<int> Complete()
         {
             return await _context.SaveChangesAsync();
         }

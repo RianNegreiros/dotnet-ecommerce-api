@@ -4,7 +4,6 @@ using Infra.Data;
 using Infra.Services;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
-using Npgsql;
 
 namespace API.Extensions
 {

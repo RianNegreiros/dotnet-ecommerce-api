@@ -12,8 +12,8 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace Infra.Data.Migrations
 {
     [DbContext(typeof(StoreContext))]
-    [Migration("20221122155518_PostgresInitial")]
-    partial class PostgresInitial
+    [Migration("20221203002236_RefactorStoreContext")]
+    partial class RefactorStoreContext
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)

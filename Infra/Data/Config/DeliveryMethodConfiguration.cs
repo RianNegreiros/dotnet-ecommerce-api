@@ -2,7 +2,7 @@ using Core.Entities.OrderAggregate;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
-namespace Infra.Config
+namespace Infra.Data.Config
 {
     public class DeliveryMethodConfiguration : IEntityTypeConfiguration<DeliveryMethod>
     {

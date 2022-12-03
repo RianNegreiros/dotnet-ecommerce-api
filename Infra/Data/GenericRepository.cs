@@ -1,6 +1,6 @@
 using Core.Entities;
 using Core.Interfaces;
-using Core.Specification;
+using Core.Specifications;
 using Microsoft.EntityFrameworkCore;
 
 namespace Infra.Data

@@ -4,7 +4,7 @@ using API.Helpers;
 using AutoMapper;
 using Core.Entities;
 using Core.Interfaces;
-using Core.Specification;
+using Core.Specifications;
 using Microsoft.AspNetCore.Mvc;
 
 namespace API.Controllers
@@ -31,9 +31,9 @@ namespace API.Controllers
         [HttpGet]
         public async Task<ActionResult<Pagination<ProductToReturnDto>>> GetProducts([FromQuery]ProductSpecParams productParams)
         {
-            var spec = new ProductWithTypesAndBrandsSpecification(productParams);
+            var spec = new ProductsWithTypesAndBrandsSpecification(productParams);
 
-            var countSpec = new ProductWithFiltersForCountSpecification(productParams);
+            var countSpec = new ProductsWithFiltersForCountSpecification(productParams);
 
             var totalItems = await _productsRepo.CountAsync(countSpec);
 
@@ -50,7 +50,7 @@ namespace API.Controllers
         [ProducesResponseType(typeof(ApiResponse), StatusCodes.Status404NotFound)]
         public async Task<ActionResult<ProductToReturnDto>> GetProduct(int id)
         {
-            var spec = new ProductWithTypesAndBrandsSpecification(id);
+            var spec = new ProductsWithTypesAndBrandsSpecification(id);
             var product = await _productsRepo.GetEntityWithSpec(spec);
 
             return Ok(_mapper.Map<Product, ProductToReturnDto>(product));
